@@ -444,10 +444,6 @@ public class FormModelerPanelPresenter {
     }
     
     //JSNI
-    native JavaScriptObject openWindow(String url) /*-{
-		return $wnd.open(url, 'blank');
-	}-*/;
-
     native JavaScriptObject getCurrentWindow() /*-{
 		return $wnd;
 	}-*/;
