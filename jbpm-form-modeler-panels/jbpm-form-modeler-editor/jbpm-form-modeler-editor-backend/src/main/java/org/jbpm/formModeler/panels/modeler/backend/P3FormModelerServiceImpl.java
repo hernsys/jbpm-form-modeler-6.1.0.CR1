@@ -16,10 +16,8 @@
 package org.jbpm.formModeler.panels.modeler.backend;
 
 import java.util.Date;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -38,13 +36,13 @@ import org.jbpm.formModeler.core.config.FormSerializationManager;
 import org.jbpm.formModeler.core.rendering.SubformFinderService;
 import org.jbpm.formModeler.editor.model.FormEditorContextTO;
 import org.jbpm.formModeler.editor.service.FormModelerService;
+import org.uberfire.io.IOService;
+import org.uberfire.java.nio.base.options.CommentedOption;
+import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.io.IOService;
-import org.uberfire.java.nio.base.options.CommentedOption;
-import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.security.Identity;
 import org.uberfire.workbench.events.NotificationEvent;
@@ -52,10 +50,9 @@ import org.uberfire.workbench.events.ResourceOpenedEvent;
 
 @Service
 @ApplicationScoped
-@Alternative
-public class FormModelerServiceImpl implements FormModelerService {
+public class P3FormModelerServiceImpl implements FormModelerService {
 
-    private Logger log = LoggerFactory.getLogger(FormModelerServiceImpl.class);
+    private Logger log = LoggerFactory.getLogger(P3FormModelerServiceImpl.class);
 
     @Inject
     @Named("ioStrategy")
@@ -108,6 +105,7 @@ public class FormModelerServiceImpl implements FormModelerService {
     @Override
     public FormEditorContextTO loadForm(Path path) {
         try {
+        	System.out.println("**alternative loadForm .form");
             org.uberfire.java.nio.file.Path kiePath = Paths.convert(path);
 
             String formPath = kiePath.toUri().toString();
@@ -155,6 +153,7 @@ public class FormModelerServiceImpl implements FormModelerService {
 
     @Override
     public Path save(Path path, FormEditorContextTO content, Metadata metadata, String comment) {
+    	System.out.println("**alternative save .form");
         FormEditorContext ctx = formEditorContextManager.getFormEditorContext(content.getCtxUID());
         ioService.write(Paths.convert(path), formSerializationManager.generateFormXML(ctx.getForm()), metadataService.setUpAttributes(path, metadata), makeCommentedOption(comment));
         return path;
@@ -162,16 +161,19 @@ public class FormModelerServiceImpl implements FormModelerService {
 
     @Override
     public Path rename(Path path, String newName, String comment) {
+    	System.out.println("**alternative rename .form");
         return renameService.rename(path, newName, comment);
     }
 
     @Override
     public void delete(Path path, String comment) {
+    	System.out.println("**alternative delete .form");
         deleteService.delete(path, comment);
     }
 
     @Override
     public Path createForm(Path path, String formName) {
+    	System.out.println("**alternative createForm .form");
         org.uberfire.java.nio.file.Path kiePath = Paths.convert(path).resolve(formName);
         try {
             if (ioService.exists(kiePath)) {
